@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<robot name="simple_biped">
+
+  <!-- Root -->
+  <link name="torso"/>
+
+  <!-- ================= RIGHT LEG ================= -->
+
+  <link name="right_hip_z"/>
+  <joint name="right_hip_yaw" type="revolute">
+    <parent link="torso"/>
+    <child link="right_hip_z"/>
+    <origin xyz="-0.014 -0.08 0.045" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.349" upper="0.349" effort="100" velocity="10"/>
+  </joint>
+
+  <link name="right_hip_y"/>
+  <joint name="right_hip_roll" type="revolute">
+    <parent link="right_hip_z"/>
+    <child link="right_hip_y"/>
+    <origin xyz="0 0 -0.08" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0.349" upper="0.349" effort="100" velocity="10"/>
+  </joint>
+
+  <link name="right_thigh"/>
+  <joint name="right_hip_pitch" type="revolute">
+    <parent link="right_hip_y"/>
+    <child link="right_thigh"/>
+    <origin xyz="0.005 -0.08 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.047" upper="2.094" effort="100" velocity="10"/>
+  </joint>
+
+  <link name="right_shin"/>
+  <joint name="right_knee" type="revolute">
+    <parent link="right_thigh"/>
+    <child link="right_shin"/>
+    <origin xyz="0 0 -0.19" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.094" upper="-0.087" effort="100" velocity="10"/>
+  </joint>
+
+  <link name="right_foot"/>
+  <joint name="right_ankle" type="revolute">
+    <parent link="right_shin"/>
+    <child link="right_foot"/>
+    <origin xyz="0 0 -0.19" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.047" upper="1.047" effort="100" velocity="10"/>
+  </joint>
+
+  <!-- ================= LEFT LEG ================= -->
+
+  <link name="left_hip_z"/>
+  <joint name="left_hip_yaw" type="revolute">
+    <parent link="torso"/>
+    <child link="left_hip_z"/>
+    <origin xyz="-0.014 0.08 0.045" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.349" upper="0.349" effort="100" velocity="10"/>
+  </joint>
+
+  <link name="left_hip_y"/>
+  <joint name="left_hip_roll" type="revolute">
+    <parent link="left_hip_z"/>
+    <child link="left_hip_y"/>
+    <origin xyz="0 0 -0.08" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0.349" upper="0.349" effort="100" velocity="10"/>
+  </joint>
+
+  <link name="left_thigh"/>
+  <joint name="left_hip_pitch" type="revolute">
+    <parent link="left_hip_y"/>
+    <child link="left_thigh"/>
+    <origin xyz="0.005 0.08 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.047" upper="2.094" effort="100" velocity="10"/>
+  </joint>
+
+  <link name="left_shin"/>
+  <joint name="left_knee" type="revolute">
+    <parent link="left_thigh"/>
+    <child link="left_shin"/>
+    <origin xyz="0 0 -0.19" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.094" upper="-0.087" effort="100" velocity="10"/>
+  </joint>
+
+  <link name="left_foot"/>
+  <joint name="left_ankle" type="revolute">
+    <parent link="left_shin"/>
+    <child link="left_foot"/>
+    <origin xyz="0 0 -0.19" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.047" upper="1.047" effort="100" velocity="10"/>
+  </joint>
+
+</robot>

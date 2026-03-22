@@ -1,0 +1,86 @@
+<mujoco model="straight_leg_biped">
+
+  <compiler angle="radian" coordinate="local"/>
+
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="RK4"/>
+
+  <default>
+    <joint damping="0.01" armature="0.01"/>
+    <geom contype="1" conaffinity="1" condim="3" friction="0.8 0.1 0.1"/>
+  </default>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.8 0.9 1.0" rgb2="0.4 0.6 0.8" width="512" height="512"/>
+    <texture name="floor_tex" type="2d" builtin="checker" rgb1="0.85 0.85 0.85" rgb2="0.7 0.7 0.7" width="512" height="512"/>
+    <material name="floor_mat" texture="floor_tex" texrepeat="4 4" reflectance="0.1"/>
+    <material name="leg_mat" rgba="0.3 0.5 0.7 1"/>
+    <material name="hip_mat" rgba="0.8 0.4 0.2 1"/>
+    <material name="foot_mat" rgba="0.2 0.2 0.2 1"/>
+  </asset>
+
+  <worldbody>
+
+    <!-- floor, slight slope for passive walking tests -->
+    <geom name="floor" type="plane" size="10 5 0.1" pos="0 0 0"
+          material="floor_mat" zaxis="0.04 0 1"/>
+
+    <!-- hip: all mass concentrated here -->
+    <body name="hip" pos="0 0 1.05">
+
+      <!-- visualise hip as a small sphere -->
+      <geom name="hip_geom" type="sphere" size="0.05"
+            material="hip_mat" mass="10"/>
+      <freejoint name="hip_free"/>
+
+      <!-- right stance leg: inverted pendulum in frontal plane -->
+      <body name="right_leg" pos="0 0 0">
+        <joint name="right_frontal" type="hinge" axis="0 1 0"
+               range="-0.5 0.5" damping="0.05"/>
+        <joint name="right_sagittal" type="hinge" axis="1 0 0"
+               range="-0.6 0.6" damping="0.05"/>
+        <geom name="right_leg_geom" type="capsule"
+              fromto="0 0 0 0 0 -1.0"
+              size="0.025" material="leg_mat" mass="0.01"/>
+        <body name="right_foot" pos="0 0 -1.0">
+          <geom name="right_foot_geom" type="sphere" size="0.035"
+                material="foot_mat" mass="0.05"
+                contype="1" conaffinity="1"/>
+        </body>
+      </body>
+
+      <!-- left swing leg: regular pendulum in sagittal plane -->
+      <body name="left_leg" pos="0 0 0">
+        <joint name="left_frontal" type="hinge" axis="0 1 0"
+               range="-0.5 0.5" damping="0.05"/>
+        <joint name="left_sagittal" type="hinge" axis="1 0 0"
+               range="-0.6 0.6" damping="0.05"/>
+        <geom name="left_leg_geom" type="capsule"
+              fromto="0 0 0 0 0 -1.0"
+              size="0.025" material="leg_mat" mass="0.01"/>
+        <body name="left_foot" pos="0 0 -1.0">
+          <geom name="left_foot_geom" type="sphere" size="0.035"
+                material="foot_mat" mass="0.05"
+                contype="1" conaffinity="1"/>
+        </body>
+      </body>
+
+    </body>
+  </worldbody>
+
+  <actuator>
+    <!-- minimal hip actuators — used only to inject energy on flat ground -->
+    <!-- set to zero for passive slope tests -->
+    <motor name="right_frontal_act" joint="right_frontal" gear="5" ctrllimited="true" ctrlrange="-2 2"/>
+    <motor name="right_sagittal_act" joint="right_sagittal" gear="5" ctrllimited="true" ctrlrange="-2 2"/>
+    <motor name="left_frontal_act" joint="left_frontal" gear="5" ctrllimited="true" ctrlrange="-2 2"/>
+    <motor name="left_sagittal_act" joint="left_sagittal" gear="5" ctrllimited="true" ctrlrange="-2 2"/>
+  </actuator>
+
+  <sensor>
+    <framepos name="hip_pos" objtype="body" objname="hip"/>
+    <framevelp name="hip_vel" objtype="body" objname="hip"/>
+    <framepos name="right_foot_pos" objtype="body" objname="right_foot"/>
+    <framepos name="left_foot_pos" objtype="body" objname="left_foot"/>
+  </sensor>
+
+</mujoco>

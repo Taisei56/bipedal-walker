@@ -1,0 +1,137 @@
+<mujoco model="simple_biped">
+    <compiler angle="degree"/>
+
+    <option timestep="0.0002"/>
+
+    <asset>
+        <mesh name="main_body" file="meshes/main_body.stl" scale="1 1 1"/>
+        <mesh name="hip_z_r" file="meshes/hip_z_r.stl" scale="1 1 1"/>
+        <mesh name="hip_y_r" file="meshes/hip_y_r.stl" scale="1 1 1"/>
+        <mesh name="thigh_r" file="meshes/thigh_r.stl" scale="1 1 1"/>
+        <mesh name="shin_r" file="meshes/shin_r.stl" scale="1 1 1"/>
+        <mesh name="foot_r" file="meshes/foot_r.stl" scale="1 1 1"/>
+        <mesh name="hip_z_l" file="meshes/hip_z_l.stl" scale="1 1 1"/>
+        <mesh name="hip_y_l" file="meshes/hip_y_l.stl" scale="1 1 1"/>
+        <mesh name="thigh_l" file="meshes/thigh_l.stl" scale="1 1 1"/>
+        <mesh name="shin_l" file="meshes/shin_l.stl" scale="1 1 1"/>
+        <mesh name="foot_l" file="meshes/foot_l.stl" scale="1 1 1"/>
+    </asset>
+
+    <worldbody>
+        <light name="sun" directional="true" dir="-1 -1 -2" castshadow="true"/>
+
+        <!-- Ground plane -->
+        <geom name="ground" type="plane" size="50 50 0.1" rgba="0.2 0.3 0.4 1"/>
+        <!-- Obstacle box -->
+        <geom
+            name="obstacle_box"
+            type="box"
+            pos="-4 0 -0.06"
+            size="0.5 4.2 0.075"
+            rgba="0.6 0.6 0.6 1"
+            euler="0 10 0"/>
+
+        <geom
+            name="obstacle_box_2"
+            type="box"
+            pos="-4.95 0 -0.06"
+            size="0.5 4.2 0.075"
+            rgba="0.6 0.6 0.6 1"
+            euler="0 -10 0"/>
+
+
+        <!-- Torso -->
+        <body name="torso" pos="0 0 0.5">
+            <!-- visual -->
+            <geom type="mesh" mesh="main_body" mass="0" contype="0" conaffinity="0" euler="-0 0 -90"/>
+            <geom type="box" size="0.2 0.11 0.15" pos="-0.05 0 0.0" mass="8" rgba="0.8 0.2 0.2 0.0"/>
+            <geom type="box" size="0.17 0.11 0.05" pos="-0.0 0 0.25" mass="0" rgba="0.8 0.2 0.2 0.0"/>
+            <joint type="free"/> 
+            
+
+            <!-- Right leg -->
+            <body name="right_hip_z" pos="-0.014 -0.08 0.045">
+                <joint name="right_hip_z_j" type="hinge" axis="0 0 1" range="-20 20"/>
+                <geom type="mesh" mesh="hip_z_r" mass="0" contype="0" conaffinity="0" euler="-0 0 -90"/>
+                <geom type="capsule" size="0.07 0.025" mass="0.6" rgba="0.2 0.2 0.8 0.0" pos="0 0.0 -0.05"  euler="-0 0 0" contype="0" conaffinity="0"/>
+                <body name="right_hip_y" pos="0 -0.00 -0.08">
+                    <joint name="right_hip_y_j" type="hinge" axis="1 0 0" range="-20 20"/>
+                    <geom type="mesh" mesh="hip_y_r" mass="0" contype="0" conaffinity="0" pos="-0.035 -0.0 0.0"  euler="-0 0 -90"/>
+                    <geom type="capsule" size="0.07 0.025" mass="0.6" rgba="0.2 0.2 0.8 0.0" pos="0 -0.05 0.0"  euler="90 0 0" contype="0" conaffinity="0"/>
+                    <body name="right_thigh" pos="0.005 -0.08 -0.0">
+                        <joint name="right_hip" type="hinge" axis="0 1 0" range="-60 120"/>
+                        <geom type="mesh" mesh="thigh_r" mass="0" contype="0" conaffinity="0" pos="-0.0 -0.022 0.0"  euler="-0 -50 -90"/>
+                        <geom type="capsule" size="0.07 0.07" mass="0.8" rgba="0.2 0.2 0.8 0.0" pos="0 0 -0.11" contype="0" conaffinity="0"/>
+                        <!-- Right shin -->
+                        <body name="right_shin" pos="0 0 -0.19">
+                            <joint name="right_knee" type="hinge" axis="0 1 0" range="-120 -5"/>
+                            <geom type="mesh" mesh="shin_r" mass="0" contype="0" conaffinity="0" pos="-0.0 -0.022 0.0"  euler="-0 52 -90"/>
+                            <geom name="right_shin_geom" type="capsule" size="0.07 0.07" mass="0.8" rgba="0.2 0.2 0.8 0.0" pos="0 0 -0.12" contype="0" conaffinity="0"/>
+                            <body name="right_foot" pos="0 0 -0.19">
+                                <joint name="right_foot_j" type="hinge" axis="0 1 0" range="-60 60"/>
+                                <geom type="mesh" mesh="foot_r" mass="0" contype="0" conaffinity="0" pos="-0.0 -0.022 0.0"  euler="-0 0 -90"/>
+                                <geom name="right_foot_geom" type="capsule" size="0.04 0.08" mass="0.1" rgba="0.2 0.2 0.8 0.0" pos="0.01 -0.010 -0.037" euler="-0 90 0"/>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+            <!-- Left leg -->
+            <!-- Left leg -->
+            <body name="left_hip_z" pos="-0.014 0.08 0.045">
+                <joint name="left_hip_z_j" type="hinge" axis="0 0 1" range="-20 20"/>
+                <geom type="mesh" mesh="hip_z_l" mass="0" contype="0" conaffinity="0" euler="-0 0 -90"/>
+                <geom type="capsule" size="0.07 0.025" mass="0.6" rgba="0.2 0.8 0.2 0.0"
+                    pos="0 0.0 -0.05" contype="0" conaffinity="0"/>
+
+                <body name="left_hip_y" pos="0 0.00 -0.08">
+                    <joint name="left_hip_y_j" type="hinge" axis="1 0 0" range="-20 20"/>
+                    <geom type="mesh" mesh="hip_y_l" mass="0" contype="0" conaffinity="0"
+                        pos="-0.035 0.0 0.0" euler="-0 0 -90"/>
+                    <geom type="capsule" size="0.07 0.025" mass="0.6" rgba="0.2 0.8 0.2 0.0"
+                        pos="0 0.05 0.0" euler="90 0 0" contype="0" conaffinity="0"/>
+
+                    <body name="left_thigh" pos="0.005 0.08 0.0">
+                        <joint name="left_hip" type="hinge" axis="0 1 0" range="-60 120"/>
+                        <geom type="mesh" mesh="thigh_l" mass="0" contype="0" conaffinity="0"
+                            pos="-0.0 0.022 0.0" euler="-0 -50 -90"/>
+                        <geom type="capsule" size="0.07 0.07" mass="0.8" rgba="0.2 0.8 0.2 0.0"
+                            pos="0 0 -0.11" contype="0" conaffinity="0"/>
+
+                        <!-- Left shin -->
+                        <body name="left_shin" pos="0 0 -0.19">
+                            <joint name="left_knee" type="hinge" axis="0 1 0" range="-120 -5"/>
+                            <geom type="mesh" mesh="shin_l" mass="0" contype="0" conaffinity="0"
+                                pos="-0.0 0.022 0.0" euler="-0 52 -90"/>
+                            <geom name="left_shin_geom" type="capsule" size="0.07 0.07" mass="0.8"
+                                rgba="0.2 0.8 0.2 0.0" pos="0 0 -0.12" contype="0" conaffinity="0"/>
+
+                            <body name="left_foot" pos="0 0 -0.19">
+                                <joint name="left_foot_j" type="hinge" axis="0 1 0" range="-60 60"/>
+                                <geom type="mesh" mesh="foot_l" mass="0" contype="0" conaffinity="0"
+                                    pos="-0.0 0.022 0.0" euler="-0 0 -90"/>
+                                <geom name="left_foot_geom" type="capsule" size="0.04 0.08" mass="0.1"
+                                    rgba="0.2 0.8 0.2 0.0" pos="0.01 0.010 -0.037" euler="-0 90 0"/>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+
+    <actuator>
+        <velocity joint="right_hip_z_j" kv="15"/>
+        <velocity joint="right_hip_y_j" kv="20"/>
+        <velocity joint="right_hip" kv="20"/>
+        <velocity joint="right_knee" kv="15"/>
+        <velocity joint="right_foot_j" kv="1"/>
+
+        <velocity joint="left_hip_z_j" kv="15"/>
+        <velocity joint="left_hip_y_j" kv="20"/>
+        <velocity joint="left_hip" kv="20"/>
+        <velocity joint="left_knee" kv="15"/>
+        <velocity joint="left_foot_j" kv="1"/>
+    </actuator>
+    
+</mujoco>
